@@ -3,25 +3,16 @@
 Global SPOTIFY_PATH:= A_Args[1], SPOTIFY_EXE:= "spotify.exe"
 Try{
     ; if spotify is running -> get the PID
-    if(tempHwnd:=WinExist("ahk_exe " SPOTIFY_EXE))
-        WinGet, sPID, PID , ahk_id %tempHwnd%
-    else{ ; if not, run spotify and get the PID
-        Run,% SPOTIFY_PATH? SPOTIFY_PATH: "spotify:" , %A_AppData%, UseErrorLevel, sPID
-        if(ErrorLevel){
-            MsgBox, 16,, Pass the path to spotify
-            ExitApp, 1
-        }
+    WinGet, sPID, PID , ahk_exe %SPOTIFY_EXE%
+    if(!sPID){ ; if not, run spotify
+        Run,% SPOTIFY_PATH? SPOTIFY_PATH : "spotify:" , %A_AppData%, Hide, sPID
         ; wait for the window to exist
-        WinWait, ahk_pid %sPID%
-        ; make sure the PID belongs to Spotify.exe
-        WinGet, pName, ProcessName, ahk_pid %sPID%
-        ; if not, wait at most 5 seconds for a spotify window and get the PID
-        if(pName != SPOTIFY_EXE){
-            WinWait, ahk_exe %SPOTIFY_EXE%,, 5
-            WinGet, sPID, PID
-        }
+        WinWait, ahk_exe %SPOTIFY_EXE%,, 5
+        ; get the PID
+        WinGet, sPID, PID
+        WinShow, 
     }
-    ;get the Hwnd for the default window
+    ; get the Hwnd for the default window
     tempHwnd:= WinExist("Spotify ahk_exe " SPOTIFY_EXE)
     ; get the Hwnd for all spotify windows (including hidden windows)
     WinGet, sHwnd, List, ahk_pid %sPID%
