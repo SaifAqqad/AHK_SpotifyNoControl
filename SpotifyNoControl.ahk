@@ -12,9 +12,8 @@ Try{
         WinGet, sPID, PID
         WinShow, 
     }
-    ; get the Hwnd for the default window
-    tempHwnd:= WinExist("Spotify ahk_exe " SPOTIFY_EXE)
-    ; get the Hwnd for all spotify windows (including hidden windows)
+    ; Focus the main window
+    WinActivate, ahk_pid %sPID%
     WinGet, sHwnd, List, ahk_pid %sPID%
     Loop, %sHwnd% {
         if(sHwnd%A_Index% = tempHwnd) ; skip the default window
