@@ -14,9 +14,13 @@ Try{
     }
     ; Focus the main window
     WinActivate, ahk_pid %sPID%
+    ; get the Hwnd for all spotify windows
     WinGet, sHwnd, List, ahk_pid %sPID%
     Loop, %sHwnd% {
-        if(sHwnd%A_Index% = tempHwnd) ; skip the default window
+        ; only the main window has a title
+        ; so check the window title
+        WinGetTitle, sTitle, % "ahk_id " . sHwnd%A_Index%
+        if(sTitle) ; if there's a title -> skip the window
             Continue
         ; resize the window to 0,0 and place it on the bottom of the z order
         DllCall("SetWindowPos", "UInt", sHwnd%A_Index%, "UInt", 1, "Int", 0, "Int", 0, "Int", 0, "Int", 0, "UInt", 0x0200 | 0x0002)
