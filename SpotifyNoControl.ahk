@@ -1,11 +1,11 @@
 ;@Ahk2Exe-SetMainIcon %A_ScriptDir%\SpotifyNoControl.ico
 #NoTrayIcon
-Global SPOTIFY_PATH:= A_Args[1], SPOTIFY_EXE:= "spotify.exe"
+Global SPOTIFY_EXE:= "Spotify.exe"
 Try{
     ; if spotify is running -> get the PID
     WinGet, sPID, PID , ahk_exe %SPOTIFY_EXE%
     if(!sPID){ ; if not, run spotify
-        Run,% SPOTIFY_PATH? SPOTIFY_PATH : "spotify:" , %A_AppData%, Hide, sPID
+        Run, % getSpotifyFullPath() , %A_AppData%, Hide, sPID
         ; wait for the window to exist
         WinWait, ahk_exe %SPOTIFY_EXE%,, 5
         ; get the PID
@@ -28,4 +28,15 @@ Try{
     ExitApp, 0
 } Catch {
     ExitApp, 1
+}
+
+getSpotifyFullPath(){
+    p_path:= A_Args[1]
+    if(!p_path){
+        ; works regardless of where spotify is installed
+        RegRead, p_path, HKCR\spotify\shell\open\command
+        SplitPath, p_path,, p_path
+        p_path:= StrReplace(p_path, """") "\" SPOTIFY_EXE
+    }
+    return p_path
 }
