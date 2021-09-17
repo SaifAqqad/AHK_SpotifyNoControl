@@ -1,3 +1,5 @@
+#### This no longer works on version 1.1.68.628 and above
+
 ## SpotifyNoControl.ahk
 for use with Spicetify's [dribbblish theme](https://github.com/morpheusthewhite/spicetify-themes/tree/master/Dribbblish).
 
